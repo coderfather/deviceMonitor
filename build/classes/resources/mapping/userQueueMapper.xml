@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.deviceMonitor.intf.dao.UserQueueMapper">
+	<resultMap id="result" type="com.deviceMonitor.model.UserQueue">
+		<result property="user_id" column="user_id" />
+		<result property="queue" column="queue" />
+	</resultMap>
+
+	<insert id="insert" parameterType="com.deviceMonitor.model.UserQueue">
+	<![CDATA[
+		INSERT INTO tb_user_queue
+		(user_id, queue)
+		VALUE
+		(#{user_id}, #{queue})
+	]]>
+	</insert>
+
+	<insert id="replace" parameterType="com.deviceMonitor.model.UserQueue">
+	<![CDATA[
+		REPLACE INTO tb_user_queue
+		(user_id, queue)
+		VALUE
+		(#{user_id}, #{queue})
+	]]>
+	</insert>
+	
+	
+	<update id="update" parameterType="com.deviceMonitor.model.UserQueue">
+	<![CDATA[
+		UPDATE tb_user_queue 
+		SET
+		user_id=#{user_id}, 
+        queue=#{queue}
+		WHERE
+		user_id=#{user_id}
+	]]>
+	</update>
+	
+	<delete id="delete" parameterType="java.lang.String">
+		DELETE FROM tb_user_queue
+		WHERE user_id=#{user_id}
+	</delete>
+	
+	<select id="query" parameterType="java.lang.String" resultType="com.deviceMonitor.model.UserQueue">
+	<![CDATA[
+		SELECT
+		user_id, queue
+		FROM tb_user_queue
+		WHERE
+		user_id=#{user_id}
+	]]>
+	</select>
+
+	<select id="list" resultType="com.deviceMonitor.model.UserQueue">
+	<![CDATA[
+		SELECT user_id, queue 
+		FROM tb_user_queue
+		LIMIT #{start},#{limit}
+	]]>
+	</select>
+	
+	<select id="listAll" resultType="com.deviceMonitor.model.UserQueue">
+	<![CDATA[
+		SELECT user_id, queue 
+		FROM tb_user_queue
+	]]>
+	</select>
+
+	<select id="listAllRecordsCount" resultType="int">
+	<![CDATA[
+		SELECT COUNT(*) AS `value` FROM tb_user_queue
+	]]>
+	</select>
+
+	<select id="isExists" resultType="int" parameterType="java.util.HashMap">
+	<![CDATA[
+		SELECT COUNT(*) AS `value` FROM tb_user_queue WHERE column_key=#{params.key} AND id<>#{params.id}
+	]]>
+	</select>
+
+	<select id="listByParams" resultType="com.deviceMonitor.model.UserQueue">
+		SELECT user_id, queue  
+		FROM tb_user_queue
+		WHERE 1=1
+		<if test="userId != null">
+			AND user_id=#{userId}
+		</if>
+	</select>
+	
+	<insert id="batchInsert" parameterType="com.deviceMonitor.model.UserQueue">
+		INSERT INTO tb_user_queue
+		(user_id, queue)
+		VALUES
+		
+		<foreach collection="listInsertUserQueue" item="model" separator=","> 
+        (           
+			#{model.user_id},
+			#{model.queue}
+        )
+    	</foreach>
+	</insert>
+	
+	<update id="batchUpdate" parameterType="com.deviceMonitor.model.UserQueue">
+		<foreach collection="listUpdateUserQueue" item="model" separator=";">
+		    UPDATE tb_user_queue 
+			SET
+			user_id=#{model.user_id},
+			queue=#{model.queue}
+			WHERE
+		</foreach>
+	</update>
+		
+	<insert id="batchReplace" parameterType="com.deviceMonitor.model.UserQueue">
+		REPLACE INTO tb_user_queue
+		(user_id, queue)
+		VALUES
+		
+		<foreach collection="listReplaceUserQueue" item="model" separator=","> 
+        (           
+			#{model.user_id},
+			#{model.queue}
+        )
+    	</foreach>
+	</insert>
+	
+	<delete id="batchDelete">
+		DELETE FROM tb_user_queue
+		WHERE id IN 
+		<foreach item="item" index="index" collection="delIds" 
+                 open="(" separator="," close=")">
+                #{item}
+        </foreach>
+	</delete>
+</mapper>

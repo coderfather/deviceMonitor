@@ -1,0 +1,9 @@
+ .icon_add {
+     background: url('../../resources/images/button-icon/icon_add.png') 0 0 no-repeat   !important;
+ }
+.icon_delete {
+     background: url('../../resources/images/button-icon/icon_delete.png') 0 0 no-repeat  !important;
+ }
+ .icon_update {
+     background: url('../../resources/images/button-icon/icon_update.png')  0  0 no-repeat  !important;
+ }

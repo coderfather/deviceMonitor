@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.deviceMonitor.intf.dao.DeviceTagsMapper">
+	<resultMap id="result" type="com.deviceMonitor.model.DeviceTags">
+		<result property="register_number" column="register_number" />
+		<result property="device_code" column="device_code" />
+		<result property="resolution_ver" column="resolution_ver" />
+		<result property="tag_name" column="tag_name" />
+		<result property="data_type" column="data_type" />
+		<result property="rw_flag" column="rw_flag" />
+		<result property="sNop" column="sNop" />
+	</resultMap>
+
+	<insert id="insert" parameterType="com.deviceMonitor.model.DeviceTags">
+	<![CDATA[
+		INSERT INTO tb_device_tags
+		(register_number, device_code, resolution_ver, tag_name, data_type, rw_flag, sNop)
+		VALUE
+		(#{register_number}, #{device_code}, #{resolution_ver}, #{tag_name}, #{data_type}, #{rw_flag}, #{sNop})
+	]]>
+	</insert>
+
+	<insert id="replace" parameterType="com.deviceMonitor.model.DeviceTags">
+	<![CDATA[
+		REPLACE INTO tb_device_tags
+		(register_number, device_code, resolution_ver, tag_name, data_type, rw_flag, sNop)
+		VALUE
+		(#{register_number}, #{device_code}, #{resolution_ver}, #{tag_name}, #{data_type}, #{rw_flag}, #{sNop})
+	]]>
+	</insert>
+	
+	<select id="list" resultType="com.deviceMonitor.model.syn.DeviceTagsView">
+	<![CDATA[
+		SELECT 
+		a.id,a.register_number, a.device_code, a.resolution_ver, a.tag_name, a.data_type, a.rw_flag, a.sNop,
+		b.id as tagId,b.display_name,b.display_value,b.display_format,b.display_remark
+		FROM tb_device_tags a
+		LEFT JOIN tb_device_param b
+		ON a.register_number=b.register_number AND a.tag_name=b.tag_name
+		WHERE a.register_number =#{listRangeEx.params.registerNumber}
+		LIMIT #{listRangeEx.start},#{listRangeEx.limit}
+	]]>
+	</select>
+
+	<select id="listAllRecordsCount" resultType="int">
+	<![CDATA[
+		SELECT COUNT(*) AS `value` FROM tb_device_tags where device_code=#{listRangeEx.params.deviceCode}
+	]]>
+	</select>
+	
+	<select id="listByParams" resultType="com.deviceMonitor.model.DeviceTags">
+		SELECT id, register_number, device_code, resolution_ver, tag_name, data_type, rw_flag, sNop  
+		FROM tb_device_tags
+		WHERE 1=1
+		<if test="params.registerNumber != null">
+			AND register_number=#{params.registerNumber}
+		</if>
+	</select>
+</mapper>

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.deviceMonitor.intf.dao.DeviceStationMapper">
+	<resultMap id="result" type="com.deviceMonitor.model.DeviceStation">
+		<result property="id" column="id" />
+		<result property="register_number" column="register_number" />
+		<result property="device_code" column="device_code" />
+		<result property="device_name" column="device_name" />
+		<result property="device_queue" column="device_queue" />
+		<result property="device_state" column="device_state" />
+		<result property="max_comm_volume" column="max_comm_volume" />
+		<result property="max_table_volume" column="max_table_volume" />
+		<result property="user_id" column="user_id" />
+		<result property="group1_id" column="group1_id" />
+		<result property="group2_id" column="group2_id" />
+		<result property="group3_id" column="group3_id" />
+		<result property="resolution_ver" column="resolution_ver" />
+	</resultMap>
+
+	<insert id="insert" parameterType="com.deviceMonitor.model.DeviceStation">
+	<![CDATA[
+		INSERT INTO tb_device_station
+		(id, register_number, device_code, device_name,device_queue,device_state, max_comm_volume, max_table_volume, user_id, group1_id, group2_id, group3_id, resolution_ver,name,cel,tel,data1)
+		VALUE
+		(#{id}, #{register_number}, #{device_code}, #{device_name}, #{device_queue}, #{device_state}, #{max_comm_volume}, #{max_table_volume}, #{user_id}, #{group1_id}, #{group2_id}, #{group3_id}, #{resolution_ver},#{name},#{cel},#{tel},#{data1})
+	]]>
+	</insert>
+
+	<insert id="replace" parameterType="com.deviceMonitor.model.DeviceStation">
+	<![CDATA[
+		REPLACE INTO tb_device_station
+		(id, register_number, device_code, device_name,device_queue,device_state, max_comm_volume, max_table_volume, user_id, group1_id, group2_id, group3_id, resolution_ver,name,cel,tel,data1)
+		VALUE
+		(#{id}, #{register_number}, #{device_code}, #{device_name}, #{device_queue}, #{device_state}, #{max_comm_volume}, #{max_table_volume}, #{user_id}, #{group1_id}, #{group2_id}, #{group3_id}, #{resolution_ver},#{name},#{cel},#{tel},#{data1})
+	]]>
+	</insert>
+	
+	
+	<update id="update" parameterType="com.deviceMonitor.model.DeviceStation">
+	<![CDATA[
+		UPDATE tb_device_station 
+		SET
+        register_number=#{register_number}, 
+        device_code=#{device_code}, 
+        device_name=#{device_name}, 
+        device_queue=#{device_queue},
+        device_state=#{device_state},
+        max_comm_volume=#{max_comm_volume}, 
+        max_table_volume=#{max_table_volume}, 
+        user_id=#{user_id}, 
+        group1_id=#{group1_id}, 
+        group2_id=#{group2_id}, 
+        group3_id=#{group3_id}, 
+        resolution_ver=#{resolution_ver},
+        name=#{name},
+        cel=#{cel},
+        tel=#{tel},
+        data1=#{data1}
+		WHERE
+		id=#{id}
+	]]>
+	</update>
+	
+	<update id="updateDevice" parameterType="com.deviceMonitor.model.DeviceStation">
+	<![CDATA[
+		UPDATE tb_device_station 
+		SET
+        device_code=#{device_code}, 
+        device_name=#{device_name}, 
+        group3_id=#{group3_id} 
+		WHERE
+		id=#{id}
+	]]>
+	</update>
+	
+	<update id="updateVer">
+	<![CDATA[
+		UPDATE tb_device_station 
+		SET
+		resolution_ver=#{resolutionVer}
+		WHERE
+        register_number=#{registerNumber}
+	]]>
+	</update>
+	
+	<delete id="delete" parameterType="java.lang.String">
+		DELETE FROM tb_device_station
+		WHERE id=#{id}
+	</delete>
+	
+	<select id="query" parameterType="java.lang.String" resultType="com.deviceMonitor.model.DeviceStation">
+	<![CDATA[
+		SELECT
+		id, register_number, device_code, device_name,device_queue,device_state, max_comm_volume, max_table_volume, user_id, group1_id, group2_id, group3_id, resolution_ver,name,cel,tel,data1
+		FROM tb_device_station
+		WHERE
+		id=#{id}
+	]]>
+	</select>
+
+	<select id="list" resultType="com.deviceMonitor.model.DeviceStation">
+	<![CDATA[
+		SELECT id, register_number, device_code, device_name,device_queue,device_state, max_comm_volume, max_table_volume, user_id, group1_id, group2_id, group3_id, resolution_ver,name,cel,tel,data1
+		FROM tb_device_station
+		LIMIT #{start},#{limit}
+	]]>
+	</select>
+	
+	<select id="listAll" resultType="com.deviceMonitor.model.DeviceStation">
+	<![CDATA[
+		SELECT id, register_number, device_code, device_name,device_queue,device_state, max_comm_volume, max_table_volume, user_id, group1_id, group2_id, group3_id, resolution_ver,name,cel,tel,data1 
+		FROM tb_device_station
+	]]>
+	</select>
+
+	<select id="listAllRecordsCount" resultType="int">
+	<![CDATA[
+		SELECT COUNT(*) AS `value` FROM tb_device_station
+	]]>
+	</select>
+
+	<select id="isExists" resultType="int" parameterType="java.util.HashMap">
+	<![CDATA[
+		SELECT COUNT(*) AS `value` FROM tb_device_station WHERE register_number=#{params.key} AND id<>#{params.id}
+	]]>
+	</select>
+
+	<select id="isExistsDevice" resultType="int" parameterType="java.util.HashMap">
+	<![CDATA[
+		SELECT COUNT(*) AS `value` FROM tb_device_station WHERE device_code=#{params.key} AND id<>#{params.id}
+	]]>
+	</select>
+	
+	<select id="listByParams" resultType="com.deviceMonitor.model.DeviceStation">
+		SELECT id, register_number, device_code, device_name,device_queue,device_state, max_comm_volume, max_table_volume, user_id, group1_id, group2_id, group3_id, resolution_ver,name,cel,tel,data1  
+		FROM tb_device_station
+		WHERE 1=1
+		<if test="params.userId != null">
+		    AND id IN (select device_station_id from tb_device_user where user_id=#{params.userId})
+		</if>
+		<if test="params.registerNumber != null">
+			AND register_number=#{params.registerNumber}
+		</if>
+		<if test="params.deviceCode != null">
+			AND device_code=#{params.deviceCode}
+		</if>
+	</select>
+	
+	<insert id="batchInsert" parameterType="com.deviceMonitor.model.DeviceStation">
+		INSERT INTO tb_device_station
+		(id, register_number, device_code, device_name,device_queue,device_state, max_comm_volume, max_table_volume, user_id, group1_id, group2_id, group3_id, resolution_ver)
+		VALUES
+		
+		<foreach collection="listInsertDeviceStation" item="model" separator=","> 
+        (           
+			#{model.id},
+			#{model.register_number},
+			#{model.device_code},
+			#{model.device_name},
+			#{model.device_queue},
+			#{model.device_state},
+			#{model.max_comm_volume},
+			#{model.max_table_volume},
+			#{model.user_id},
+			#{model.group1_id},
+			#{model.group2_id},
+			#{model.group3_id},
+			#{model.resolution_ver}
+        )
+    	</foreach>
+	</insert>
+	
+	<update id="batchUpdate" parameterType="com.deviceMonitor.model.DeviceStation">
+		<foreach collection="listUpdateDeviceStation" item="model" separator=";">
+		    UPDATE tb_device_station 
+			SET
+			id=#{model.id},
+			register_number=#{model.register_number},
+			device_code=#{model.device_code},
+			device_name=#{model.device_name},
+			device_queue=#{model.device_queue},
+			device_state=#{model.device_state},
+			max_comm_volume=#{model.max_comm_volume},
+			max_table_volume=#{model.max_table_volume},
+			user_id=#{model.user_id},
+			group1_id=#{model.group1_id},
+			group2_id=#{model.group2_id},
+			group3_id=#{model.group3_id},
+			resolution_ver=#{model.resolution_ver},
+			name=#{model.name},
+	        cel=#{model.cel},
+	        tel=#{model.tel},
+	        data1=#{model.data1}
+			WHERE
+		</foreach>
+	</update>
+		
+	<insert id="batchReplace" parameterType="com.deviceMonitor.model.DeviceStation">
+		REPLACE INTO tb_device_station
+		(id, register_number, device_code, device_name,device_queue,device_state, max_comm_volume, max_table_volume, user_id, group1_id, group2_id, group3_id, resolution_ver)
+		VALUES
+		
+		<foreach collection="listReplaceDeviceStation" item="model" separator=","> 
+        (           
+			#{model.id},
+			#{model.register_number},
+			#{model.device_code},
+			#{model.device_name},
+			#{model.device_queue},
+			#{model.device_state},
+			#{model.max_comm_volume},
+			#{model.max_table_volume},
+			#{model.user_id},
+			#{model.group1_id},
+			#{model.group2_id},
+			#{model.group3_id},
+			#{model.resolution_ver}
+        )
+    	</foreach>
+	</insert>
+	
+	<delete id="batchDelete">
+		DELETE FROM tb_device_station
+		WHERE id IN 
+		<foreach item="item" index="index" collection="delIds" 
+                 open="(" separator="," close=")">
+                #{item}
+        </foreach>
+	</delete>
+</mapper>

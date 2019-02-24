@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.deviceMonitor.intf.dao.UserMapper">
+	<resultMap id="result" type="com.deviceMonitor.model.User">
+		<result property="id" column="id" />
+		<result property="role_id" column="role_id" />
+		<result property="imei" column="imei" />
+		<result property="login_name" column="login_name" />
+		<result property="pwd" column="pwd" />
+		<result property="user_name" column="user_name" />
+		<result property="sex" column="sex" />
+		<result property="phone" column="phone" />
+		<result property="phone_type" column="phone_type" />
+		<result property="email" column="email" />
+		<result property="company" column="company" />
+		<result property="address" column="address" />
+		<result property="enabled" column="enabled" />
+		<result property="remark" column="remark" />
+		<result property="parent_id" column="parent_id" />
+		<result property="limit_ver" column="limit_ver" />
+	</resultMap>
+
+	<insert id="insert" parameterType="com.deviceMonitor.model.User">
+	<![CDATA[
+		INSERT INTO tb_user
+		(role_id, imei, login_name, pwd, user_name, sex, phone, phone_type, email, company, address, enabled, remark, parent_id, limit_ver)
+		VALUE
+		(#{role_id}, #{imei}, #{login_name}, #{pwd}, #{user_name}, #{sex}, #{phone}, #{phone_type}, #{email}, #{company}, #{address}, #{enabled}, #{remark}, #{parent_id}, #{limit_ver})
+	]]>
+	</insert>
+
+	<insert id="replace" parameterType="com.deviceMonitor.model.User">
+	<![CDATA[
+		REPLACE INTO tb_user
+		(id, role_id, imei, login_name, pwd, user_name, sex, phone, phone_type, email, company, address, enabled, remark, parent_id, limit_ver)
+		VALUE
+		(#{id}, #{role_id}, #{imei}, #{login_name}, #{pwd}, #{user_name}, #{sex}, #{phone}, #{phone_type}, #{email}, #{company}, #{address}, #{enabled}, #{remark}, #{parent_id}, #{limit_ver})
+	]]>
+	</insert>
+	
+	
+	<update id="update" parameterType="com.deviceMonitor.model.User">
+	<![CDATA[
+		UPDATE tb_user 
+		SET
+        role_id=#{role_id}, 
+        imei=#{imei}, 
+        login_name=#{login_name}, 
+        pwd=#{pwd}, 
+        user_name=#{user_name}, 
+        sex=#{sex}, 
+        phone=#{phone}, 
+        phone_type=#{phone_type}, 
+        email=#{email}, 
+        company=#{company}, 
+        address=#{address}, 
+        enabled=#{enabled}, 
+        remark=#{remark}, 
+        parent_id=#{parent_id}, 
+        limit_ver=#{limit_ver}
+		WHERE
+		id=#{id}
+	]]>
+	</update>
+	
+	<delete id="delete" parameterType="java.lang.String">
+		DELETE FROM tb_user
+		WHERE id=#{id}
+	</delete>
+	
+	<select id="query" parameterType="java.lang.String" resultType="com.deviceMonitor.model.User">
+	<![CDATA[
+		SELECT
+		id, role_id, imei, login_name, pwd, user_name, sex, phone, phone_type, email, company, address, enabled, remark, parent_id, limit_ver
+		FROM tb_user
+		WHERE
+		id=#{id}
+	]]>
+	</select>
+	
+	<select id="login" resultType="com.deviceMonitor.model.User">
+	<![CDATA[
+		SELECT
+		id, role_id, imei, login_name, pwd, user_name, sex, phone, phone_type, email, company, address, enabled, remark, parent_id, limit_ver
+		FROM tb_user
+		WHERE
+		login_name=#{loginName} and pwd=#{pwd} 
+		LIMIT 0,1
+	]]>
+	</select>
+
+	<select id="listByDeviceUserIds" resultType="com.deviceMonitor.model.User">
+		SELECT id, role_id, imei, login_name, pwd, user_name, sex, phone, phone_type, email, company, address, enabled, remark, parent_id, limit_ver 
+		FROM tb_user
+		WHERE id IN
+		<foreach item="item" index="index" collection="listDeviceUserId" 
+                 open="(" separator="," close=")">
+                #{item}
+        </foreach>
+	</select>
+	
+	<select id="list" resultType="com.deviceMonitor.model.User">
+	<![CDATA[
+		SELECT id, role_id, imei, login_name, pwd, user_name, sex, phone, phone_type, email, company, address, enabled, remark, parent_id, limit_ver 
+		FROM tb_user
+		LIMIT #{start},#{limit}
+	]]>
+	</select>
+	
+	<select id="listAll" resultType="com.deviceMonitor.model.User">
+	<![CDATA[
+		SELECT id, role_id, imei, login_name, pwd, user_name, sex, phone, phone_type, email, company, address, enabled, remark, parent_id, limit_ver 
+		FROM tb_user
+	]]>
+	</select>
+
+	<select id="listAllRecordsCount" resultType="int">
+	<![CDATA[
+		SELECT COUNT(*) AS `value` FROM tb_user
+	]]>
+	</select>
+
+	<select id="isExists" resultType="int" parameterType="java.util.HashMap">
+	<![CDATA[
+		SELECT COUNT(*) AS `value` FROM tb_user WHERE login_name=#{params.key} AND id<>#{params.id}
+	]]>
+	</select>
+
+	<select id="listByParams" resultType="com.deviceMonitor.model.User">
+		SELECT id, role_id, imei, login_name, pwd, user_name, sex, phone, phone_type, email, company, address, enabled, remark, parent_id, limit_ver  
+		FROM tb_user
+		WHERE 1=1
+		<if test="loginName != null and loginName != ''">
+			AND login_name=#{loginName}
+		</if>
+		<if test="phone != null and phone != ''">
+			AND phone=#{phone}
+		</if>
+	</select>
+	
+	<insert id="batchInsert" parameterType="com.deviceMonitor.model.User">
+		INSERT INTO tb_user
+		(id, role_id, imei, login_name, pwd, user_name, sex, phone, phone_type, email, company, address, enabled, remark, parent_id, limit_ver)
+		VALUES
+		
+		<foreach collection="listInsertUser" item="model" separator=","> 
+        (           
+			#{model.id},
+			#{model.role_id},
+			#{model.imei},
+			#{model.login_name},
+			#{model.pwd},
+			#{model.user_name},
+			#{model.sex},
+			#{model.phone},
+			#{model.phone_type},
+			#{model.email},
+			#{model.company},
+			#{model.address},
+			#{model.enabled},
+			#{model.remark},
+			#{model.parent_id},
+			#{model.limit_ver}
+        )
+    	</foreach>
+	</insert>
+	
+	<update id="batchUpdate" parameterType="com.deviceMonitor.model.User">
+		<foreach collection="listUpdateUser" item="model" separator=";">
+		    UPDATE tb_user 
+			SET
+			role_id=#{model.role_id},
+			imei=#{model.imei},
+			login_name=#{model.login_name},
+			pwd=#{model.pwd},
+			user_name=#{model.user_name},
+			sex=#{model.sex},
+			phone=#{model.phone},
+			phone_type=#{model.phone_type},
+			email=#{model.email},
+			company=#{model.company},
+			address=#{model.address},
+			enabled=#{model.enabled},
+			remark=#{model.remark},
+			parent_id=#{model.parent_id},
+			limit_ver=#{model.limit_ver}
+			WHERE id=#{model.id}
+		</foreach>
+	</update>
+		
+	<insert id="batchReplace" parameterType="com.deviceMonitor.model.User">
+		REPLACE INTO tb_user
+		(id, role_id, imei, login_name, pwd, user_name, sex, phone, phone_type, email, company, address, enabled, remark, parent_id, limit_ver)
+		VALUES
+		
+		<foreach collection="listReplaceUser" item="model" separator=","> 
+        (           
+			#{model.id},
+			#{model.role_id},
+			#{model.imei},
+			#{model.login_name},
+			#{model.pwd},
+			#{model.user_name},
+			#{model.sex},
+			#{model.phone},
+			#{model.phone_type},
+			#{model.email},
+			#{model.company},
+			#{model.address},
+			#{model.enabled},
+			#{model.remark},
+			#{model.parent_id},
+			#{model.limit_ver}
+        )
+    	</foreach>
+	</insert>
+	
+	<delete id="batchDelete">
+		DELETE FROM tb_user
+		WHERE id IN 
+		<foreach item="item" index="index" collection="delIds" 
+                 open="(" separator="," close=")">
+                #{item}
+        </foreach>
+	</delete>
+</mapper>

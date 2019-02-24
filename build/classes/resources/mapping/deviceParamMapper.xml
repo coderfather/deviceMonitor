@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.deviceMonitor.intf.dao.DeviceParamMapper">
+	<resultMap id="result" type="com.deviceMonitor.model.DeviceParam">
+		<result property="id" column="id" />
+		<result property="device_station_id" column="device_station_id" />
+		<result property="register_number" column="register_number" />
+		<result property="device_code" column="device_code" />
+		<result property="tag_name" column="tag_name" />
+		<result property="display_value" column="display_value" />
+		<result property="limit_set" column="limit_set" />
+		<result property="data_type" column="data_type" />
+		<result property="display_name" column="display_name" />
+		<result property="display_format" column="display_format" />
+		<result property="display_remark" column="display_remark" />
+	</resultMap>
+
+	<insert id="insert" parameterType="com.deviceMonitor.model.DeviceParam">
+	<![CDATA[
+		INSERT INTO tb_device_param
+		(id, device_station_id, register_number, device_code, tag_name, display_value, limit_set, data_type, display_name, display_format, display_remark)
+		VALUE
+		(#{id}, #{device_station_id}, #{register_number}, #{device_code}, #{tag_name}, #{display_value}, #{limit_set}, #{data_type}, #{display_name}, #{display_format}, #{display_remark})
+	]]>
+	</insert>
+
+	<insert id="replace" parameterType="com.deviceMonitor.model.DeviceParam">
+	<![CDATA[
+		REPLACE INTO tb_device_param
+		(id, device_station_id, register_number, device_code, tag_name, display_value, limit_set, data_type, display_name, display_format, display_remark)
+		VALUE
+		(#{id}, #{device_station_id}, #{register_number}, #{device_code}, #{tag_name}, #{display_value}, #{limit_set}, #{data_type}, #{display_name}, #{display_format}, #{display_remark})
+	]]>
+	</insert>
+	
+	
+	<update id="update" parameterType="com.deviceMonitor.model.DeviceParam">
+	<![CDATA[
+		UPDATE tb_device_param 
+		SET
+		id=#{id}, 
+        device_station_id=#{device_station_id}, 
+        register_number=#{register_number}, 
+        device_code=#{device_code}, 
+        tag_name=#{tag_name}, 
+        display_value=#{display_value}, 
+        limit_set=#{limit_set}, 
+        data_type=#{data_type}, 
+        display_name=#{display_name}, 
+        display_format=#{display_format}, 
+        display_remark=#{display_remark}
+		WHERE
+		id=#{id}
+	]]>
+	</update>
+	
+	<delete id="delete" parameterType="java.lang.String">
+		DELETE FROM tb_device_param
+		WHERE id=#{id}
+	</delete>
+	
+	<select id="query" parameterType="java.lang.String" resultType="com.deviceMonitor.model.DeviceParam">
+	<![CDATA[
+		SELECT
+		id, device_station_id, register_number, device_code, tag_name, display_value, limit_set, data_type, display_name, display_format, display_remark
+		FROM tb_device_param
+		WHERE
+		id=#{id}
+	]]>
+	</select>
+
+	<select id="list" resultType="com.deviceMonitor.model.DeviceParam">
+	<![CDATA[
+		SELECT a.id, a.device_station_id, a.register_number, a.device_code, a.tag_name, a.display_value, a.limit_set, a.data_type, a.display_name, a.display_format, a.display_remark, b.device_name 
+		FROM tb_device_param a
+		inner join tb_device_station b
+		on a.device_station_id = b.id
+		LIMIT #{start},#{limit}
+	]]>
+	</select>
+	
+	<select id="listAll" resultType="com.deviceMonitor.model.DeviceParam">
+	<![CDATA[
+		SELECT id, device_station_id, register_number, device_code, tag_name, display_value, limit_set, data_type, display_name, display_format, display_remark 
+		FROM tb_device_param
+	]]>
+	</select>
+
+	<select id="listAllRecordsCount" resultType="int">
+	<![CDATA[
+		SELECT COUNT(*) AS `value` FROM tb_device_param
+	]]>
+	</select>
+
+	<select id="isExists" resultType="int" parameterType="java.util.HashMap">
+	<![CDATA[
+		SELECT COUNT(*) AS `value` FROM tb_device_param WHERE tag_name=#{params.key} AND id<>#{params.id}
+	]]>
+	</select>
+
+	<select id="listByParams" resultType="com.deviceMonitor.model.DeviceParam">
+		SELECT id, device_station_id, register_number, device_code, tag_name, display_value, limit_set, data_type, display_name, display_format, display_remark  
+		FROM tb_device_param
+		WHERE 1=1
+		<if test="params.registerNumber != null">
+			AND register_number=#{params.registerNumber}
+		</if>
+		<if test="params.deviceCode != null">
+			AND device_code=#{params.deviceCode}
+		</if>
+	</select>
+	
+	<insert id="batchInsert" parameterType="com.deviceMonitor.model.DeviceParam">
+		INSERT INTO tb_device_param
+		(id, device_station_id, register_number, device_code, tag_name, display_value, limit_set, data_type, display_name, display_format, display_remark)
+		VALUES
+		
+		<foreach collection="listInsertDeviceParam" item="model" separator=","> 
+        (           
+			#{model.id},
+			#{model.device_station_id},
+			#{model.register_number},
+			#{model.device_code},
+			#{model.tag_name},
+			#{model.display_value},
+			#{model.limit_set},
+			#{model.data_type},
+			#{model.display_name},
+			#{model.display_format},
+			#{model.display_remark}
+        )
+    	</foreach>
+	</insert>
+	
+	<update id="batchUpdate" parameterType="com.deviceMonitor.model.DeviceParam">
+		<foreach collection="listUpdateDeviceParam" item="model" separator=";">
+		    UPDATE tb_device_param 
+			SET
+			id=#{model.id},
+			device_station_id=#{model.device_station_id},
+			register_number=#{model.register_number},
+			device_code=#{model.device_code},
+			tag_name=#{model.tag_name},
+			display_value=#{model.display_value},
+			limit_set=#{model.limit_set},
+			data_type=#{model.data_type},
+			display_name=#{model.display_name},
+			display_format=#{model.display_format},
+			display_remark=#{model.display_remark}
+			WHERE
+		</foreach>
+	</update>
+		
+	<insert id="batchReplace" parameterType="com.deviceMonitor.model.DeviceParam">
+		REPLACE INTO tb_device_param
+		(id, device_station_id, register_number, device_code, tag_name, display_value, limit_set, data_type, display_name, display_format, display_remark)
+		VALUES
+		
+		<foreach collection="listReplaceDeviceParam" item="model" separator=","> 
+        (           
+			#{model.id},
+			#{model.device_station_id},
+			#{model.register_number},
+			#{model.device_code},
+			#{model.tag_name},
+			#{model.display_value},
+			#{model.limit_set},
+			#{model.data_type},
+			#{model.display_name},
+			#{model.display_format},
+			#{model.display_remark}
+        )
+    	</foreach>
+	</insert>
+	
+	<delete id="batchDelete">
+		DELETE FROM tb_device_param
+		WHERE id IN 
+		<foreach item="item" index="index" collection="delIds" 
+                 open="(" separator="," close=")">
+                #{item}
+        </foreach>
+	</delete>
+</mapper>

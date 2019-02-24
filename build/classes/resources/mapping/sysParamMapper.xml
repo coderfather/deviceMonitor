@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.deviceMonitor.intf.dao.SysParamMapper">
+	<resultMap id="result" type="com.deviceMonitor.model.SysParam">
+		<result property="id" column="id" />
+		<result property="type" column="type" />
+		<result property="code" column="code" />
+		<result property="name" column="name" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+	<insert id="insert" parameterType="com.deviceMonitor.model.SysParam">
+	<![CDATA[
+		INSERT INTO tb_sys_param
+		(type, code, name, remark)
+		VALUE
+		(#{type}, #{code}, #{name}, #{remark})
+	]]>
+	</insert>
+
+	<insert id="replace" parameterType="com.deviceMonitor.model.SysParam">
+	<![CDATA[
+		REPLACE INTO tb_sys_param
+		(id, type, code, name, remark)
+		VALUE
+		(#{id}, #{type}, #{code}, #{name}, #{remark})
+	]]>
+	</insert>
+	
+	
+	<update id="update" parameterType="com.deviceMonitor.model.SysParam">
+	<![CDATA[
+		UPDATE tb_sys_param 
+		SET
+        type=#{type}, 
+        code=#{code}, 
+        name=#{name}, 
+        remark=#{remark}
+		WHERE
+		id=#{id}
+	]]>
+	</update>
+	
+	<delete id="delete" parameterType="java.lang.String">
+		DELETE FROM tb_sys_param
+		WHERE id=#{id}
+	</delete>
+	
+	<select id="query" parameterType="java.lang.String" resultType="com.deviceMonitor.model.SysParam">
+	<![CDATA[
+		SELECT
+		id, type, code, name, remark
+		FROM tb_sys_param
+		WHERE
+		id=#{id}
+	]]>
+	</select>
+
+	<select id="list" resultType="com.deviceMonitor.model.SysParam">
+	<![CDATA[
+		SELECT id, type, code, name, remark 
+		FROM tb_sys_param
+		LIMIT #{start},#{limit}
+	]]>
+	</select>
+	
+	<select id="listAll" resultType="com.deviceMonitor.model.SysParam">
+	<![CDATA[
+		SELECT id, type, code, name, remark 
+		FROM tb_sys_param
+	]]>
+	</select>
+
+	<select id="listAllRecordsCount" resultType="int">
+	<![CDATA[
+		SELECT COUNT(*) AS `value` FROM tb_sys_param
+	]]>
+	</select>
+
+	<select id="isExists" resultType="int" parameterType="java.util.HashMap">
+	<![CDATA[
+		SELECT COUNT(*) AS `value` FROM tb_sys_param WHERE code=#{params.key} AND id<>#{params.id}
+	]]>
+	</select>
+
+	<select id="listByParams" resultType="com.deviceMonitor.model.SysParam">
+		SELECT id, type, code, name, remark  
+		FROM tb_sys_param
+		WHERE 1=1
+		<if test="type != null">
+			AND type=#{type}
+		</if>
+	</select>
+	
+	<insert id="batchInsert" parameterType="com.deviceMonitor.model.SysParam">
+		INSERT INTO tb_sys_param
+		(id, type, code, name, remark)
+		VALUES
+		
+		<foreach collection="listInsertSysParam" item="model" separator=","> 
+        (           
+			#{model.id},
+			#{model.type},
+			#{model.code},
+			#{model.name},
+			#{model.remark}
+        )
+    	</foreach>
+	</insert>
+	
+	<update id="batchUpdate" parameterType="com.deviceMonitor.model.SysParam">
+		<foreach collection="listUpdateSysParam" item="model" separator=";">
+		    UPDATE tb_sys_param 
+			SET
+			id=#{model.id},
+			type=#{model.type},
+			code=#{model.code},
+			name=#{model.name},
+			remark=#{model.remark}
+			WHERE
+		</foreach>
+	</update>
+		
+	<insert id="batchReplace" parameterType="com.deviceMonitor.model.SysParam">
+		REPLACE INTO tb_sys_param
+		(id, type, code, name, remark)
+		VALUES
+		
+		<foreach collection="listReplaceSysParam" item="model" separator=","> 
+        (           
+			#{model.id},
+			#{model.type},
+			#{model.code},
+			#{model.name},
+			#{model.remark}
+        )
+    	</foreach>
+	</insert>
+	
+	<delete id="batchDelete">
+		DELETE FROM tb_sys_param
+		WHERE id IN 
+		<foreach item="item" index="index" collection="delIds" 
+                 open="(" separator="," close=")">
+                #{item}
+        </foreach>
+	</delete>
+</mapper>

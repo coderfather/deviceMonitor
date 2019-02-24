@@ -1,0 +1,21 @@
+.row-style{ 
+                    border-bottom-color: #9AA4AC !important; 
+                    color:#9AA4AC !important; 
+                    border-color: #9AA4AC !important; 
+                    border-top-color: #9AA4AC  !important;
+                    border-top-width: 0.9px;
+                    border-top-style: solid;
+                    border-left-color: #9AA4AC !important;
+                    border-left-width: 0.9px;
+                    border-left-style: solid;
+                    border-right-color: #9AA4AC  !important;
+                    border-right-width: 0.9px;
+                    border-right-style: solid;
+}
+.x-grid3-cell-inner{
+      border-right: 1px solid #9AA4AC;
+}
+ /*与表头对齐*/
+ .x-grid3-row td, .x-grid3-summary-row td{
+      padding-right: 0px;
+}

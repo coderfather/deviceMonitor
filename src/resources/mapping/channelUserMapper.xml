@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.deviceMonitor.intf.dao.ChannelUserMapper">
+	<resultMap id="result" type="com.deviceMonitor.model.ChannelUser">
+		<result property="device_param_id" column="device_param_id" />
+		<result property="device_user_id" column="device_user_id" />
+		<result property="is_display" column="is_display" />
+		<result property="is_modify" column="is_modify" />
+	</resultMap>
+	
+	<select id="listAllRecordsCount" resultType="int">
+	<![CDATA[
+		SELECT COUNT(*) AS `value` FROM tb_channel_user
+	]]>
+	</select>
+
+	<select id="list" resultType="com.deviceMonitor.model.ChannelUser">
+	<![CDATA[
+		SELECT a.id, a.device_param_id, a.device_user_id, a.is_display, a.is_modify, c.id as device_station_id, b.register_number, b.device_code, b.tag_name, c.device_name 
+		FROM tb_channel_user a
+		inner join tb_device_param b
+		on b.id = a.device_param_id
+		inner join tb_device_station c
+		on b.device_station_id = c.id
+		LIMIT #{start},#{limit}
+	]]>
+	</select>
+	
+	<insert id="insert" parameterType="com.deviceMonitor.model.ChannelUser">
+	<![CDATA[
+		INSERT INTO tb_channel_user
+		(device_param_id, device_user_id, is_display, is_modify)
+		VALUE
+		(#{device_param_id}, #{device_user_id}, #{is_display}, #{is_modify})
+	]]>
+	</insert>
+	
+	<update id="update" parameterType="com.deviceMonitor.model.ChannelUser">
+	<![CDATA[
+		UPDATE tb_channel_user 
+		SET
+        device_param_id=#{device_param_id}, 
+        device_user_id=#{device_user_id},
+        is_display=#{is_display},
+        is_modify=#{is_modify}
+        WHERE
+		id=#{id}
+	]]>
+	</update>
+
+	<insert id="replace" parameterType="com.deviceMonitor.model.ChannelUser">
+	<![CDATA[
+		REPLACE INTO tb_channel_user
+		(id, device_param_id, device_user_id, is_display, is_modify)
+		VALUE
+		(#{id}, #{device_param_id}, #{device_user_id}, #{is_display}, #{is_modify})
+	]]>
+	</insert>
+	
+	<select id="listAllByChannelIds" resultType="com.deviceMonitor.model.ChannelUser">
+		SELECT 
+		device_param_id, device_user_id, is_display, is_modify 
+		FROM tb_channel_user
+		WHERE device_param_id IN 
+		<foreach collection="listChannelId" item="item" index="index" 
+                 open="(" separator="," close=")">
+                #{item}
+        </foreach>
+	</select>
+	
+	<delete id="batchDelete">
+		DELETE FROM tb_channel_user
+		WHERE device_param_id IN 
+		<foreach item="item" index="index" collection="delIds" 
+                 open="(" separator="," close=")">
+                #{item}
+        </foreach>
+	</delete>
+</mapper>

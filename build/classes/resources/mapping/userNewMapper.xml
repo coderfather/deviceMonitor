@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.deviceMonitor.intf.dao.IUserDao">
+	<resultMap id="result" type="com.deviceMonitor.model.User">
+		<result property="id" column="id" />
+		<result property="role_id" column="role_id" />
+		<result property="imei" column="imei" />
+		<result property="login_name" column="login_name" />
+		<result property="pwd" column="pwd" />
+		<result property="user_name" column="user_name" />
+		<result property="sex" column="sex" />
+		<result property="phone" column="phone" />
+		<result property="phone_type" column="phone_type" />
+		<result property="email" column="email" />
+		<result property="company" column="company" />
+		<result property="address" column="address" />
+		<result property="enabled" column="enabled" />
+		<result property="remark" column="remark" />
+		<result property="parent_id" column="parent_id" />
+		<result property="limit_ver" column="limit_ver" />
+	</resultMap>
+
+	<select id="select" parameterType="java.lang.String" resultType="com.deviceMonitor.model.User">
+	<![CDATA[
+		SELECT
+		id, role_id, imei, login_name, pwd, user_name, sex, phone, phone_type, email, company, address, enabled, remark, parent_id, limit_ver
+		FROM tb_user
+		WHERE
+		id=#{id}
+	]]>
+	</select>
+	
+	<select id="selectByLoginName" parameterType="java.lang.String" resultType="com.deviceMonitor.model.User">
+	<![CDATA[
+		SELECT
+		id, role_id, imei, login_name, pwd, user_name, sex, phone, phone_type, email, company, address, enabled, remark, parent_id, limit_ver
+		FROM tb_user
+		WHERE
+		login_name=#{loginName}
+	]]>
+	</select>
+</mapper>
